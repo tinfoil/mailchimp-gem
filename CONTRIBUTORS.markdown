@@ -1,3 +1,4 @@
+* [wnadeau](https://github.com/wnadeau)
 * [Chris Kelly](https://github.com/ckdake)
 * [Stafford Brooke](https://github.com/srbiv)
 * [Loren Norman](https://github.com/lorennorman)
