@@ -115,11 +115,6 @@ class ApiTest < Test::Unit::TestCase
       @returns = Struct.new(:body).new(["array", "entries"].to_json)
     end
 
-    should "produce a good exporter" do
-      @exporter = @api.get_exporter
-      assert_equal(@exporter.api_key, @api.api_key)
-    end
-
     should "throw exception if configured to and the API replies with a JSON hash containing a key called 'error'" do
       Mailchimp::API.stubs(:post).returns(Struct.new(:body).new({'error' => 'bad things'}.to_json))
       assert_nothing_raised do
@@ -136,47 +131,12 @@ class ApiTest < Test::Unit::TestCase
         @api.say_hello
       end
     end
+    should 'allow one to check api key validity' do
+      Mailchimp::API.stubs(:post).returns(Struct.new(:body).new(%q{"Everything's Chimpy!"}.to_json))
+      assert_equal true, @api.valid_api_key?
+    end
   end
 
-  context "export API" do
-    setup do
-      @key = "TESTKEY-us1"
-      @api = Mailchimp::APIExport.new(@key)
-      @url = "http://us1.api.mailchimp.com/export/1.0/"
-      @body = {:apikey => @key, :id => "listid"}
-      @returns = Struct.new(:body).new(["array", "entries"].to_json)
-    end
-
-    should "handle api key with dc" do
-      @api_key = "TESTKEY-us2"
-      @api = Mailchimp::APIExport.new(@api_key)
-
-      params = {:body => @body, :timeout => nil}
-    
-      url = @url.gsub('us1', 'us2') + "sayHello/"
-      Mailchimp::APIExport.expects(:post).with(url, params).returns(@returns)
-      @api.say_hello(@body)
-    end
-
-    should "not throw exception if the Export API replies with a JSON hash containing a key called 'error'" do
-      Mailchimp::APIExport.stubs(:post).returns(Struct.new(:body).new({'error' => 'bad things'}.to_json))
-
-      assert_nothing_raised do
-        @api.say_hello(@body)
-      end
-    end
-
-    should "throw exception if configured to and the Export API replies with a JSON hash containing a key called 'error'" do
-      @api.throws_exceptions = true
-      params = {:body => @body, :timeout => nil}
-      Mailchimp::APIExport.stubs(:post).returns(Struct.new(:body).new({'error' => 'bad things', 'code' => '123'}.to_json))
-
-      assert_raise RuntimeError do
-        @api.say_hello(@body)
-      end
-    end
-
-  end
 
   private
 

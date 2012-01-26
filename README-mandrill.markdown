@@ -62,8 +62,3 @@ You can tell ActionMailer to send mail using Mandrill by adding the follow to to
 
 These setting will allow you to use ActionMailer as you normally would, any calls to mail() will be sent using Mandrill
 
-### Other Stuff
-
-Mandrill defaults to a 30 second timeout. You can optionally set your own timeout (in seconds) like so:
-
-    sts.timeout = 5

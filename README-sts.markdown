@@ -63,8 +63,3 @@ If, for some reason, you want to use ActionMailer and change your tags dynamical
 
     ActionMailer::Base.mailchimp_sts_settings[:tags] = ["dynamically", "set", "tags"]
 
-### Other Stuff
-
-STS defaults to a 30 second timeout. You can optionally set your own timeout (in seconds) like so:
-
-    sts.timeout = 5

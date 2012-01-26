@@ -59,11 +59,6 @@ or
 
     email_stats = api.campaignEmailStatsAIM({:cid => campaign_id, :email_address => email_array})
 
-### Other Stuff
-
-API defaults to a 30 second timeout. You can optionally set your own timeout (in seconds) like so:
-
-    api.timeout = 5
 
 ### Export API usage
 

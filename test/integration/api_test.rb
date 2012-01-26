@@ -6,7 +6,7 @@ class ApiIntegrationTest < Test::Unit::TestCase
     FakeWeb.register_uri(
       :post,
       'https://us1.api.mailchimp.com/1.3/?method=ping',
-      body: "Everything's Chimpy!".to_json
+      body: %q{"Everything's Chimpy!"}
     )
     expected_request = {"apikey"=>"abc123-us1"}
     

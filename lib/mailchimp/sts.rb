@@ -3,44 +3,19 @@ if defined?(ActionMailer)
 end
 
 module Mailchimp
-  class STS
-    include HTTParty
-    default_timeout 30
-
-    attr_accessor :api_key, :timeout, :options
-
+  class STS < Base
     def initialize(api_key = nil, extra_params = {})
-      @api_key = api_key || ENV['MAILCHIMP_API_KEY'] || self.class.api_key
-      @default_params = {
-        :apikey => @api_key,
+        super(api_key,{
+        :apikey => api_key,
         :options => {
           :track_opens => true, 
           :track_clicks => true
-        }
-      }.merge(extra_params)
-    end
-
-    def api_key=(value)
-      @api_key = value
-      @default_params = @default_params.merge({:apikey => @api_key})
-    end
-
-    def base_api_url
-      dc = (@api_key == '' || @api_key == nil) ? '' : "#{@api_key.split("-").last}."
-      "https://#{dc}sts.mailchimp.com/1.0/"
+          }
+        }.merge(extra_params))
     end
 
     def call(method, params = {})
-      url = "#{base_api_url}#{method}"
-      params = @default_params.merge(params)
-      response = self.class.post(url, :body => params, :timeout => @timeout)
-
-      begin
-        response = JSON.parse(response.body)
-      rescue
-        response = response.body
-      end
-      response
+      super("#{base_api_url}#{method}",params.merge({:apikey => @api_key}))
     end
 
     def method_missing(method, *args)
@@ -57,5 +32,11 @@ module Mailchimp
         new(self.api_key).send(sym, *args, &block)
       end
     end
+    
+    private
+      
+      def base_api_url
+        "https://#{dc_from_api_key}sts.mailchimp.com/1.0/"
+      end
   end
 end

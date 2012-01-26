@@ -50,13 +50,6 @@ class MandrillTest < Test::Unit::TestCase
       expect_post(@url, DEFAULT_OPTIONS.merge(:key => nil))
       @api.users_ping
     end
-  
-    should "handle malformed api key" do
-      @api_key = "123"
-      @api.api_key = @api_key
-      expect_post(@url, DEFAULT_OPTIONS.merge(:key => @api_key))
-      @api.users_ping
-    end
       
     should "handle timeout" do
       expect_post(@url, DEFAULT_OPTIONS.merge(:key => nil), 120)

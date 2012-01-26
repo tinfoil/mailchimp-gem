@@ -17,12 +17,12 @@ module Mailchimp
       @default_params = @default_params.merge({:apikey => @api_key})
     end
 
-    def get_exporter
-      APIExport.new(@api_key, @default_params)
-    end
-
     def base_api_url
       "https://#{dc_from_api_key}api.mailchimp.com/1.3/?method="
+    end
+    
+    def valid_api_key?(*args)
+      %q{"Everything's Chimpy!"} == call("#{base_api_url}ping")
     end
 
     protected
@@ -30,7 +30,8 @@ module Mailchimp
     def call(method, params = {})
       api_url = base_api_url + method
       params = @default_params.merge(params)
-      response = self.class.post(api_url, :body => CGI::escape(params.to_json), :timeout => @timeout)
+      timeout = params.delete(:timeout) || @timeout
+      response = self.class.post(api_url, :body => CGI::escape(params.to_json), :timeout => timeout)
 
       begin
         response = JSON.parse(response.body)
@@ -63,32 +64,6 @@ module Mailchimp
 
     def dc_from_api_key
       (@api_key.nil? || @api_key.length == 0 || @api_key !~ /-/) ? '' : "#{@api_key.split("-").last}."
-    end
-  end
-
-  class APIExport < API
-    def initialize(api_key = nil, extra_params = {})
-      super(api_key, extra_params)
-    end
-
-    protected
-
-    def export_api_url
-      "http://#{dc_from_api_key}api.mailchimp.com/export/1.0/"
-    end
-
-    def call(method, params = {})
-      api_url = export_api_url + method + "/"
-      params = @default_params.merge(params)
-      response = self.class.post(api_url, :body => params, :timeout => @timeout)
-
-      lines = response.body.lines
-      if @throws_exceptions
-        first_line_object = JSON.parse(lines.first) if lines.first
-        raise "Error from MailChimp Export API: #{first_line_object["error"]} (code #{first_line_object["code"]})" if first_line_object.is_a?(Hash) && first_line_object["error"]
-      end
-
-      lines
     end
   end
 end
