@@ -20,9 +20,7 @@ module Mailchimp
 
     def method_missing(method, *args)
       method = method.to_s.gsub(/\/(.?)/) { "::#{$1.upcase}" }.gsub(/(?:^|_)(.)/) { $1.upcase } #Thanks for the gsub, Rails
-      args = {} unless args.length > 0
-      args = args[0] if (args.class.to_s == "Array")
-      call(method, args)
+      call(method, *args)
     end
 
     class << self
