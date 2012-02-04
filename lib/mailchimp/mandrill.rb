@@ -27,9 +27,7 @@ module Mailchimp
     def method_missing(method, *args)
       match = method.to_s.match(/([a-z]*)_([a-z]*)_?([a-z]*)/)
       method = "#{match[1]}/#{match[2]}#{match[3] == '' ? "" : "-"+match[3]}"
-      args = {} unless args.length > 0
-      args = args[0] if (args.class.to_s == "Array")
-      call(method, args)
+      call(method, *args)
     end
 
     
