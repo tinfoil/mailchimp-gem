@@ -62,11 +62,10 @@ You can tell ActionMailer to send mail using Mandrill by adding the follow to to
 
 These setting will allow you to use ActionMailer as you normally would, any calls to mail() will be sent using Mandrill
 
-If your application requires specifying the API Key on a per email basis, you can configure your application like so:
+If your application will specify the API Key on a per email basis, you can configure your application like so:
 
     config.action_mailer.delivery_method = :mailchimp_mandrill
     config.action_mailer.mailchimp_mandrill_settings = {
-          :use_api_key_from_mail_header => true,
           :track_clicks => true,
           :track_opens  => true, 
           :from_name    => "Change Me"
@@ -84,6 +83,8 @@ Once this is specified, be sure to include the api_key in ActionMailer.mail()'s 
 	         api_key: object_with_api_key.api_key)
 	  end
 	end
+	
+And the Mandrill Delivery Hander will read the api key from the email message object, instead of the application configuration
      
 
 
