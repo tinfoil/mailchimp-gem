@@ -5,7 +5,7 @@ module Mailchimp
     attr_accessor :settings
 
     def initialize options
-      self.settings = {:use_api_key_from_mail_header => false, :track_opens => true, :track_clicks => true}.merge(options)
+      self.settings = {:track_opens => true, :track_clicks => true}.merge(options)
     end
 
     def deliver! message
@@ -38,11 +38,8 @@ module Mailchimp
 
       message_payload[:tags] = settings[:tags] if settings[:tags]
       
-      if settings[:use_api_key_from_mail_header]
-        Mandrill.new(message.api_key).send_email(message_payload)     
-      else
-        Mandrill.new(settings[:api_key]).send_email(message_payload)        
-      end
+      api_key = message.header['api-key'].present? ? message.header['api-key'] : settings[:api_key]
+      Mandrill.new(api_key).send_email(message_payload)
     end
 
   end
