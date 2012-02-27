@@ -42,7 +42,7 @@ module Mailchimp
       
       puts "Setting up Mandrill API connection with API Key #{api_key}" if settings[:debug] == true
             
-      response = Mandrill.new(api_key).send_email(message_payload)
+      response = Mailchimp::Mandrill.new(api_key).messages_send(message_payload)
       
       puts "Got response from Mandrill: #{response}" if settings[:debug] == true
     end
