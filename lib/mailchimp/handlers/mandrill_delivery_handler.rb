@@ -38,7 +38,7 @@ module Mailchimp
 
       message_payload[:tags] = settings[:tags] if settings[:tags]
       
-      api_key = message.header['api-key'].present? ? message.header['api-key'] : settings[:api_key]
+      api_key = message.header['api-key'].blank? ? settings[:api_key] : message.header['api-key']
       
       puts "Setting up Mandrill API connection with API Key #{api_key}" if settings[:debug] == true
             
