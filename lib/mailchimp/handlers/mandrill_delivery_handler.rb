@@ -1,14 +1,13 @@
-require 'action_mailer'
-
 module Mailchimp
   class MandrillDeliveryHandler
     attr_accessor :settings
 
-    def initialize options
-      self.settings = {:track_opens => true, :track_clicks => true}.merge(options)
+    def initialize(options = {})
+      self.settings = {:track_opens => true, :track_clicks => true, :from_name => 'Mandrill Email Delivery Handler'}.merge(options)
     end
 
-    def deliver! message
+    def deliver!(message)
+      
       message_payload = {
         :track_opens => settings[:track_opens],
         :track_clicks => settings[:track_clicks],
@@ -16,32 +15,39 @@ module Mailchimp
           :subject => message.subject,
           :from_name => settings[:from_name],
           :from_email => message.from.first,
-          :to_email => message.to
+          :to => message.to
         }
       }
 
+      [:html, :text].each do |format|
+        content = get_content_for(message, format)
+        message_payload[:message][format] = content if content
+      end
+
+      message_payload[:tags] = settings[:tags] if settings[:tags]
+      
+      api_key = message.header['api-key'].blank? ? settings[:api_key] : message.header['api-key']
+      
+      Mailchimp::Mandrill.new(api_key).messages_send(message_payload)
+    end
+    
+    private
+    
+    def get_content_for(message, format)
       mime_types = {
         :html => "text/html",
         :text => "text/plain"
       }
-
-      get_content_for = lambda do |format|
-        content = message.send(:"#{format}_part")
-        content ||= message if message.content_type =~ %r{#{mime_types[format]}}
-        content
-      end
-
-      [:html, :text].each do |format|
-        content = get_content_for.call(format)
-        message_payload[:message][format] = content.body if content
-      end
-
-      message_payload[:tags] = settings[:tags] if settings[:tags]
-
-      Mandrill.new(settings[:api_key]).send_email(message_payload)
+      
+      content = message.send(:"#{format.to_s}_part")
+      content ||= message.body if message.mime_type == mime_types[format]
+      content
     end
-
+    
   end
 end
 
-ActionMailer::Base.add_delivery_method :mailchimp_mandrill, Mailchimp::MandrillDeliveryHandler
+if defined?(ActionMailer)
+  ActionMailer::Base.add_delivery_method(:mailchimp_mandrill, Mailchimp::MandrillDeliveryHandler)
+end
+
