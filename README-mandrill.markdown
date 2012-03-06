@@ -23,7 +23,7 @@ You can set your api_key globally and call class methods:
 
 You can also set the environment variable 'MAILCHIMP_MANDRILL_API_KEY' and Mandrill will use it when you create an instance:
 
-    mandrill = Mailchimp::Mandrill.new 
+    mandrill = Mailchimp::Mandrill.new
     
 To check if your api_key is valid:
 
