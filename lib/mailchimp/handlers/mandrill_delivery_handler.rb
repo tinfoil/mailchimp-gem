@@ -3,7 +3,7 @@ module Mailchimp
     attr_accessor :settings
 
     def initialize(options = {})
-      self.settings = {:debug => false, :track_opens => true, :track_clicks => true, :from_name => 'Mandrill Email Delivery Handler'}.merge(options)
+      self.settings = {:track_opens => true, :track_clicks => true, :from_name => 'Mandrill Email Delivery Handler'}.merge(options)
     end
 
     def deliver!(message)
@@ -28,17 +28,11 @@ module Mailchimp
       
       api_key = message.header['api-key'].blank? ? settings[:api_key] : message.header['api-key']
       
-      puts "Setting up Mandrill API connection with API Key #{api_key}" if settings[:debug] == true
-      puts "Sending message with payload: #{message_payload}" if settings[:debug] == true
-            
-      response = Mailchimp::Mandrill.new(api_key).messages_send(message_payload)
-      
-      puts "Got response from Mandrill: #{response}" if settings[:debug] == true
-      
-      response
+      Mailchimp::Mandrill.new(api_key).messages_send(message_payload)
     end
     
     private
+    
     def get_content_for(message, format)
       mime_types = {
         :html => "text/html",
