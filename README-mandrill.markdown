@@ -85,6 +85,3 @@ Once this is specified, be sure to include the api_key in ActionMailer.mail()'s 
 	end
 	
 And the Mandrill Delivery Hander will read the api key from the email message object, instead of the application configuration
-     
-
-
