@@ -1,6 +1,6 @@
 module Mailchimp
   class MandrillDeliveryHandler
-    attr_accessor :settings
+    attr_accessor :settings, :message_payload
 
     def initialize(options = {})
       self.settings = {:track_opens => true, :track_clicks => true, :from_name => 'Mandrill Email Delivery Handler'}.merge(options)
@@ -8,27 +8,27 @@ module Mailchimp
 
     def deliver!(message)
       
-      message_payload = {
+      self.message_payload = {
         :track_opens => settings[:track_opens],
         :track_clicks => settings[:track_clicks],
         :message => {
           :subject => message.subject,
           :from_name => settings[:from_name],
           :from_email => message.from.first,
-          :to => message.to.map {|email| { :email => email.to, :name => email.to } }
+          :to => message.to.map {|email| { :email => email, :name => email } }
         }
       }
 
       [:html, :text].each do |format|
         content = get_content_for(message, format)
-        message_payload[:message][format] = content if content
+        self.message_payload[:message][format] = content if content
       end
 
-      message_payload[:tags] = settings[:tags] if settings[:tags]
+      self.message_payload[:tags] = settings[:tags] if settings[:tags]
       
       api_key = message.header['api-key'].blank? ? settings[:api_key] : message.header['api-key']
       
-      Mailchimp::Mandrill.new(api_key).messages_send(message_payload)
+      Mailchimp::Mandrill.new(api_key).messages_send(self.message_payload)
     end
     
     private

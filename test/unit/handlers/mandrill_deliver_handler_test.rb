@@ -19,5 +19,21 @@ class MandrillDeliveryHandlerTest < Test::Unit::TestCase
       response = @mandrill_delivery_handler.deliver!(message)
       assert_equal @fake_mandrill_api_response, response 
     end
+    
+    context "for the mandrill api payload" do
+      should "build a valid Mandrill API payload" do
+        message = mock_mail_message
+        @mandrill_delivery_handler.deliver!(message)
+        
+        assert_equal true, @mandrill_delivery_handler.message_payload[:track_opens]
+        assert_equal true, @mandrill_delivery_handler.message_payload[:track_clicks]
+        assert_equal 'Subject', @mandrill_delivery_handler.message_payload[:message][:subject]
+        assert_equal 'foo@bar.com', @mandrill_delivery_handler.message_payload[:message][:from_email]
+        assert_equal 'Mandrill Email Delivery Handler', @mandrill_delivery_handler.message_payload[:message][:from_name]
+        assert_equal 'foo@bar.com has moved use awesome@awesomesauce.com now', @mandrill_delivery_handler.message_payload[:message][:html]
+        assert_equal [{email: 'foo@bar.com', name: 'foo@bar.com'}], @mandrill_delivery_handler.message_payload[:message][:to]
+        
+      end
+    end
   end
 end
