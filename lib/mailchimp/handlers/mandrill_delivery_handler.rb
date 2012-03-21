@@ -15,7 +15,7 @@ module Mailchimp
           :subject => message.subject,
           :from_name => settings[:from_name],
           :from_email => message.from.first,
-          :to => [{ :email => message.to, :name => message.to }]
+          :to => message.to.map {|email| { :email => email.to, :name => email.to } }
         }
       }
 
