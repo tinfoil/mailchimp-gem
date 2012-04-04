@@ -20,6 +20,12 @@ class MandrillDeliveryHandlerTest < Test::Unit::TestCase
       assert_equal @fake_mandrill_api_response, response 
     end
     
+    should "store the api response in the settings[:return_response] hash key" do
+      message = mock_mail_message
+      response = @mandrill_delivery_handler.deliver!(message)
+      assert_equal @fake_mandrill_api_response, @mandrill_delivery_handler.settings[:return_response]
+    end
+    
     context "for the mandrill api payload" do
       should "build a valid Mandrill API payload" do
         message = mock_mail_message
