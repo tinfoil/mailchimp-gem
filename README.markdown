@@ -14,7 +14,7 @@ confident that it should work out of the box for most usage scenarios.
 ##Installation
 
         # This supercedes uakari and gibbon
-        $ gem install mailchimp
+        $ gem install mailchimp --pre
 
 ##Requirements
 
