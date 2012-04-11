@@ -32,7 +32,7 @@ To check if your api_key is valid:
 
 ### Sending a message
 
-Send a message so a single email:
+Send a message to a single email:
 
     response = mandrill.messages_send({
         :message      => { 
@@ -41,7 +41,7 @@ Send a message so a single email:
             :text => 'hello world', 
             :from_name => 'John Smith', 
             :from_email => 'support@somedomain.com', 
-            :to => ['user@someotherdomain.com']
+            :to => [{'email' => 'user@someotherdomain.com', 'name' => 'User Name'}]
         }
     })
 
