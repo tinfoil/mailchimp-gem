@@ -13,7 +13,7 @@ module Mailchimp
         :track_clicks => settings[:track_clicks],
         :message => {
           :subject => message.subject,
-          :from_name => settings[:from_name],
+          :from_name => message.header['from-name'].blank? ? settings[:from_name] : message.header['from-name'],
           :from_email => message.from.first,
           :to => message.to.map {|email| { :email => email, :name => email } }
         }
