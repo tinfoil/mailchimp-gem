@@ -15,7 +15,8 @@ module Mailchimp
           :subject => message.subject,
           :from_name => message.header['from-name'].blank? ? settings[:from_name] : message.header['from-name'],
           :from_email => message.from.first,
-          :to => message.to.map {|email| { :email => email, :name => email } }
+          :to => message.to.map {|email| { :email => email, :name => email } },
+          :headers => {'Reply-To' => message.reply_to.nil? ? nil : message.reply_to }
         }
       }
 

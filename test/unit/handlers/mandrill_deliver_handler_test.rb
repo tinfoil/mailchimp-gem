@@ -38,7 +38,7 @@ class MandrillDeliveryHandlerTest < Test::Unit::TestCase
         assert_equal 'Mandrill Email Delivery Handler', @mandrill_delivery_handler.message_payload[:message][:from_name]
         assert_equal 'foo@bar.com has moved use awesome@awesomesauce.com now', @mandrill_delivery_handler.message_payload[:message][:html]
         assert_equal [{email: 'foo@bar.com', name: 'foo@bar.com'}], @mandrill_delivery_handler.message_payload[:message][:to]
-        
+        assert_equal({'Reply-To' => 'replyto@example.com'}, @mandrill_delivery_handler.message_payload[:message][:headers])
       end
     end
   end
