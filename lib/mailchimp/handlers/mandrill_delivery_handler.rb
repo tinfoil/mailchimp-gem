@@ -7,7 +7,7 @@ module Mailchimp
     end
 
     def deliver!(message)
-      
+
       self.message_payload = {
         :track_opens => settings[:track_opens],
         :track_clicks => settings[:track_clicks],
@@ -26,26 +26,28 @@ module Mailchimp
       end
 
       self.message_payload[:tags] = settings[:tags] if settings[:tags]
-      
+
       api_key = message.header['api-key'].blank? ? settings[:api_key] : message.header['api-key']
-      
+
       self.settings[:return_response] = Mailchimp::Mandrill.new(api_key).messages_send(self.message_payload)
-      
+
     end
-    
+
     private
-    
+
     def get_content_for(message, format)
       mime_types = {
         :html => "text/html",
         :text => "text/plain"
       }
-      
+
       content = message.send(:"#{format.to_s}_part")
+      content = content.body if content and content.respond_to? :body
+
       content ||= message.body if message.mime_type == mime_types[format]
       content
     end
-    
+
   end
 end
 
