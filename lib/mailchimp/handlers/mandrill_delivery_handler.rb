@@ -17,7 +17,7 @@ module Mailchimp
           :from_email => message.from.first,
           :to => message.to.map {|email| { :email => email, :name => email } },
           :headers => {'Reply-To' => message.reply_to.nil? ? nil : message.reply_to },
-          :bcc_address  => message.bcc.first,
+          :bcc_address  => message.bcc ? message.bcc.first : nil,
         }
       }
 
