@@ -9,9 +9,9 @@ module Mailchimp
     def deliver!(message)
 
       self.message_payload = {
-        :track_opens => settings[:track_opens],
-        :track_clicks => settings[:track_clicks],
         :message => {
+          :track_opens => settings[:track_opens],
+          :track_clicks => settings[:track_clicks],
           :subject => message.subject,
           :from_name => message.header['from-name'].blank? ? settings[:from_name] : message.header['from-name'],
           :from_email => message.from.first,

@@ -9,13 +9,13 @@ class BaseIntegrationTest < Test::Unit::TestCase
         body: %q{"Everything's Chimpy!"}
       )
     end
-  
+
     should "know valid api key" do
       m = Mailchimp::Base.new('abc123-us1')
       assert_equal true, m.valid_api_key?
       assert_equal true, Mailchimp.valid_api_key?('abc123-us1')
     end
-  
+
     should "know invalid api key" do
       m = Mailchimp::Base.new('abc123-us1')
       assert_equal false, !m.valid_api_key?
