@@ -7,8 +7,8 @@ class MandrillIntegrationTest < Test::Unit::TestCase
       'http://mandrillapp.com/api/1.0/users/ping',
       body: '"PONG!"'
     )
-    expected_request = "key=abc123-us1&options[track_opens]=true&options[track_clicks]=true"
-    
+    expected_request = "key=abc123-us1"
+
     m = Mailchimp::Mandrill.new('abc123-us1')
     assert_equal '"PONG!"', m.users_ping
     assert_equal true, m.valid_api_key?
