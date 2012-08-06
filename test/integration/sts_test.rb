@@ -8,7 +8,7 @@ class STSIntegrationTest < Test::Unit::TestCase
       'https://us1.sts.mailchimp.com/1.0/Ping',
       body: "Everything's Chimpy!"
     )
-    expected_request = "apikey=abc123-us1&options[track_opens]=true&options[track_clicks]=true"
+    expected_request = "{\"apikey\":\"abc123-us1\",\"options\":{\"track_opens\":true,\"track_clicks\":true}}"
     
     m = Mailchimp::STS.new('abc123-us1')
     assert_equal "Everything's Chimpy!", m.ping

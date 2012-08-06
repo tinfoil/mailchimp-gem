@@ -63,7 +63,7 @@ class MandrillTest < Test::Unit::TestCase
   def expect_post(expected_url, expected_body, expected_timeout=nil)
     Mailchimp::Mandrill.expects(:post).with do |url, opts|
       url == expected_url &&
-      opts[:body] == expected_body &&
+      JSON.parse(URI::decode(opts[:body])) == JSON.parse(expected_body.to_json)  &&
       opts[:timeout] == expected_timeout
     end.returns(Struct.new(:body).new("") )
   end

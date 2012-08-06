@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class STSTest < Test::Unit::TestCase
-  
+
   DEFAULT_OPTIONS= {:options=>{:track_opens=>true, :track_clicks=>true}}
 
   context "attributes" do
@@ -46,32 +46,32 @@ class STSTest < Test::Unit::TestCase
       @api = Mailchimp::STS.new
       @url = "https://sts.mailchimp.com/1.0/Ping"
     end
-  
+
     should "handle empty api key" do
       expect_post(@url, DEFAULT_OPTIONS.merge(:apikey => nil))
       @api.ping
     end
-  
+
     should "handle api key" do
       @api_key = "123-us1"
       @api.api_key = @api_key
       expect_post("https://us1.sts.mailchimp.com/1.0/Ping", DEFAULT_OPTIONS.merge(:apikey => @api_key))
       @api.ping
     end
-      
+
     should "handle timeout" do
       expect_post(@url, DEFAULT_OPTIONS.merge(:apikey => nil), 120)
       @api.timeout = 120
       @api.ping
     end
   end
-  
+
   private
-  
+
   def expect_post(expected_url, expected_body, expected_timeout=nil)
     Mailchimp::STS.expects(:post).with do |url, opts|
       url == expected_url &&
-      opts[:body] == expected_body &&
+      JSON.parse(URI::decode(opts[:body])) == JSON.parse(expected_body.to_json) &&
       opts[:timeout] == expected_timeout
     end.returns(Struct.new(:body).new("") )
   end
