@@ -23,7 +23,7 @@ module Mailchimp
 
       [:html, :text].each do |format|
         content = get_content_for(message, format)
-        self.message_payload[:message][format] = content if content
+        self.message_payload[:message][format] = content.to_s if content
       end
 
       self.message_payload[:tags] = settings[:tags] if settings[:tags]

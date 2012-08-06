@@ -100,9 +100,14 @@ class ApiTest < Test::Unit::TestCase
       @api.say_hello(:messages => {"simon says" => ["do this", "and this"]})
     end
 
-    should "pass through non string parameters" do
+    should "pass through integer parameters" do
       expect_post(@url, @body.merge("fee" => 99))
       @api.say_hello(:fee => 99)
+    end
+
+    should "pass through boolean parameters" do
+      expect_post(@url, @body.merge("booleantrue" => true, "booleanfalse" => false))
+      @api.say_hello(:booleantrue => true, :booleanfalse => false)
     end
   end
 
@@ -143,7 +148,7 @@ class ApiTest < Test::Unit::TestCase
   def expect_post(expected_url, expected_body, expected_timeout=nil)
     Mailchimp::API.expects(:post).with do |url, opts|
       url == expected_url &&
-      JSON.parse(URI::decode(opts[:body])) == expected_body &&
+      JSON.parse(URI::decode(opts[:body])) == JSON.parse(expected_body.to_json)  &&
       opts[:timeout] == expected_timeout
     end.returns(Struct.new(:body).new("") )
   end
