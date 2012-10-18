@@ -1,3 +1,3 @@
 module Mailchimp
-  VERSION = "0.0.7.tinfoil.5"
+  VERSION = "0.0.7.tinfoil.6"
 end

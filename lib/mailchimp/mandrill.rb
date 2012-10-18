@@ -37,7 +37,7 @@ module Mailchimp
     private
 
       def base_api_url
-        "http://mandrillapp.com/api/1.0/"
+        "https://mandrillapp.com/api/1.0/"
       end
   end
 end
