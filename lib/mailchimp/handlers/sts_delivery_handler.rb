@@ -5,13 +5,12 @@ module Mailchimp
     attr_accessor :settings
 
     def initialize options
-      self.settings = {:track_opens => true, :track_clicks => true}.merge(options)
+      self.settings = {:track_opens => true}.merge(options)
     end
 
     def deliver! message
       message_payload = {
         :track_opens => settings[:track_opens],
-        :track_clicks => settings[:track_clicks],
         :message => {
           :subject => message.subject,
           :from_name => settings[:from_name],
@@ -19,6 +18,7 @@ module Mailchimp
           :to_email => message.to
         }
       }
+      message_payload[:track_clicks] = message.track_clicks if message.track_clicks
 
       mime_types = {
         :html => "text/html",

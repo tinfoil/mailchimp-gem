@@ -8,8 +8,7 @@ module Mailchimp
         super(api_key,{
         :apikey => api_key,
         :options => {
-          :track_opens => true, 
-          :track_clicks => true
+          :track_opens => true
           }
         }.merge(extra_params))
     end
@@ -30,9 +29,9 @@ module Mailchimp
         new(self.api_key).send(sym, *args, &block)
       end
     end
-    
+
     private
-      
+
       def base_api_url
         "https://#{dc_from_api_key}sts.mailchimp.com/1.0/"
       end
