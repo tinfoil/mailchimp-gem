@@ -9,7 +9,7 @@ class MandrillDeliveryHandlerTest < Test::Unit::TestCase
 
       FakeWeb.register_uri(
       :post,
-      'http://mandrillapp.com/api/1.0/messages/send',
+      'https://mandrillapp.com/api/1.0/messages/send',
       body: @fake_mandrill_api_response.to_json
     )
     end
