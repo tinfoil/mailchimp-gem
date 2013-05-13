@@ -5,3 +5,5 @@ pkg/*
 coverage.data
 coverage
 .rvmrc
+.ruby-version
+.ruby-gemset
