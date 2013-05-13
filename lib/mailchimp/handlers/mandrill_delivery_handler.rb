@@ -3,17 +3,16 @@ module Mailchimp
     attr_accessor :settings, :message_payload
 
     def initialize(options = {})
-      self.settings = {:track_opens => true, :track_clicks => true, :from_name => 'Mandrill Email Delivery Handler'}.merge(options)
+      self.settings = {:track_opens => true, :track_clicks => true}.merge(options)
     end
 
     def deliver!(message)
-
       self.message_payload = {
         :message => {
           :track_opens => settings[:track_opens],
           :track_clicks => settings[:track_clicks],
           :subject => message.subject,
-          :from_name => message.header['from-name'].blank? ? settings[:from_name] : message.header['from-name'],
+          :from_name => (message[:from_name].blank? or message[:from_name].value.blank?) ? settings[:from_name] : message[:from_name].value,
           :from_email => message.from.first,
           :to => message.to.map {|email| { :email => email, :name => email } },
           :headers => {'Reply-To' => message.reply_to.nil? ? nil : message.reply_to },

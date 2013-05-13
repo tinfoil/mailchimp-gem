@@ -29,6 +29,7 @@ class MandrillDeliveryHandlerTest < Test::Unit::TestCase
     context "for the mandrill api payload" do
       should "build a valid Mandrill API payload" do
         message = mock_mail_message
+        message.stubs(:[]).with(:from_name).returns(mock('Mail::Field').tap{ |m| m.stubs(:value).returns('Mandrill Email Delivery Handler') })
         @mandrill_delivery_handler.deliver!(message)
 
         assert_equal true, @mandrill_delivery_handler.message_payload[:message][:track_opens]
