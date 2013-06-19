@@ -30,7 +30,6 @@ module Mailchimp
       api_key = message.header['api-key'].blank? ? settings[:api_key] : message.header['api-key']
 
       self.settings[:return_response] = Mailchimp::Mandrill.new(api_key).messages_send(self.message_payload)
-
     end
 
     private
