@@ -17,7 +17,12 @@ module Mailchimp
     end
 
     def call(method, params = {})
-      super("#{base_api_url}#{method}",@default_params.merge(params))
+      response = super("#{base_api_url}#{method}",@default_params.merge(params))
+      # Check for error codes
+      if response.is_a?(Hash) and response['status'] == "error"
+          raise "Error from Mandrill API: #{response['name']} (code #{response["code"]}): #{response['message']}"
+      end
+      response
     end
 
     def method_missing(method, *args)
