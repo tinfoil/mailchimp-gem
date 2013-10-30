@@ -20,7 +20,3 @@ end
 task :test do
   Rake::Task['cover_me:report'].invoke
 end
-
-task :spec do
-  Rake::Task['cover_me:report'].invoke
-end
