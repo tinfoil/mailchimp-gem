@@ -5,7 +5,7 @@ Mailchimp is a simple API wrapper public Mailchimp APIs.
 This is heavily based on https://github.com/amro/uakari/ and https://github.com/amro/gibbon/, and adds
 support for the private beta release of Mandrill.
 
-While this works for some simple use cases, it comes with warranty of any kind and may not work for 
+While this works for some simple use cases, it comes with warranty of any kind and may not work for
 your needs yet!
 
 We welcome bug reports and pull requests, and will remove the .alpha label from this gem once we are
@@ -27,14 +27,10 @@ See README-api.markdown for details about the API class, which supersedes the Gi
 
         api      = Mailchimp::API.new("your_api_key")
 
-See README-sts.markdown for details about the STS class, which supersedes the Uakari Gem
-
-        sts      = Mailchimp::STS.new("your_api_key")
-        
 See README-mandrill for details about the Mandrill class
 
         mandrill = Mailchimp::Mandrill.new("your_api_key")
-        
+
 ##Examples
 
 Take a look in the examples/ folder for examples using each of the APIs. The only actions these perform
@@ -42,7 +38,6 @@ are either read only or only send emails to you or the address you specify, so i
 Mailchimp API keys for them. run them like:
 
         ruby examples/api_example.rb
-        ruby examples/sts_example.rb
         ruby examples/mandrill_example.rb
 
 ### Other Stuff
