@@ -1,10 +1,12 @@
+require 'mailchimp/pseudo_json_parser'
+
 if defined?(ActionMailer)
   require File.join(File.dirname(__FILE__), 'handlers', 'mandrill_delivery_handler')
 end
 
 module Mailchimp
   class Mandrill < Base
-    parser MailchimpPsuedoJSONParser
+    parser Mailchimp::PsuedoJSONParser
 
     def initialize(api_key = nil, default_parameters = {})
       super(api_key, {
